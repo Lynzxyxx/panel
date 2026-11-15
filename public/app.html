@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sora Panel</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sora.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%2315222C'/%3E%3Ctext x='32' y='47' font-size='40' text-anchor='middle' fill='white' font-family='sans-serif'%3E空%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="shell">
+  <nav class="rail" aria-label="Menu utama">
+    <a class="brand" href="#konsol" aria-label="Sora Panel"><span class="stamp" aria-hidden="true">空</span><span class="word">SORA PANEL</span></a>
+    <ul class="menu">
+      <li><a href="#konsol" data-view="konsol"><i aria-hidden="true">端</i><span>Konsol</span></a></li>
+      <li><a href="#file" data-view="file"><i aria-hidden="true">文</i><span>File</span></a></li>
+      <li><a href="#startup" data-view="startup"><i aria-hidden="true">起</i><span>Startup</span></a></li>
+    </ul>
+    <div class="rail-foot">
+      <p id="conn" class="conn" data-on="0">Menyambung</p>
+      <button type="button" id="logout" class="link">Keluar</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <header class="server">
+      <div class="who">
+        <h1 id="srvname">Bot Telegram</h1>
+        <div class="state"><span id="led" class="led" data-s="offline"></span><span id="stateword" class="stateword">Mati</span></div>
+        <dl class="facts">
+          <div><dt>PID</dt><dd id="f-pid">-</dd></div>
+          <div><dt>Aktif</dt><dd id="f-up">-</dd></div>
+        </dl>
+      </div>
+      <div class="power" role="group" aria-label="Kontrol server">
+        <button type="button" class="key primary" id="p-start" data-act="start">Mulai</button>
+        <button type="button" class="key" id="p-restart" data-act="restart">Mulai ulang</button>
+        <button type="button" class="key stop" id="p-stop" data-act="stop">Hentikan</button>
+      </div>
+    </header>
+
+    <!-- KONSOL -->
+    <section id="v-konsol" class="view">
+      <div class="konsol">
+        <div class="term">
+          <div class="term-bar">
+            <span>Konsol</span>
+            <span class="term-tools">
+              <button type="button" class="tlink" id="btn-install">Pasang dependensi</button>
+              <button type="button" class="tlink" id="btn-clear">Bersihkan</button>
+            </span>
+          </div>
+          <div id="log" class="log" tabindex="0" role="log" aria-label="Output server"></div>
+          <button type="button" id="jump" class="jump" hidden>Ke bawah</button>
+          <form id="cmdform" class="cmd">
+            <span class="prompt" aria-hidden="true">›</span>
+            <input id="cmd" autocomplete="off" spellcheck="false" aria-label="Kirim perintah ke server" placeholder="Mulai server untuk mengirim perintah" disabled>
+          </form>
+        </div>
+        <aside class="res" aria-label="Pemakaian sumber daya">
+          <div class="m"><div class="m-h"><span>CPU</span><b id="v-cpu">0%</b></div><canvas id="c-cpu"></canvas></div>
+          <div class="m"><div class="m-h"><span>RAM</span><b id="v-mem">0 MB</b></div><canvas id="c-mem"></canvas><small id="v-memlim" class="m-note"></small></div>
+          <div class="m"><div class="m-h"><span>Disk</span><b id="v-disk">0 MB</b></div><small class="m-note">Isi folder di halaman File</small></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FILE -->
+    <section id="v-file" class="view" hidden>
+      <div class="fbar">
+        <nav id="crumbs" class="crumbs" aria-label="Lokasi folder"></nav>
+        <div class="acts">
+          <button type="button" class="key small" id="f-upload">Unggah</button>
+          <button type="button" class="key small" id="f-mkdir">Folder baru</button>
+          <button type="button" class="key small" id="f-new">File baru</button>
+        </div>
+        <input type="file" id="f-input" multiple hidden>
+      </div>
+      <div id="uploads" class="uploads"></div>
+      <div class="flist">
+        <div class="frow fhead"><span>Nama</span><span class="fsize">Ukuran</span><span class="ftime">Diubah</span><span></span></div>
+        <div id="fbody"></div>
+      </div>
+      <div id="drop" class="drop" hidden><p>Lepas file di sini untuk mengunggah</p></div>
+    </section>
+
+    <!-- STARTUP -->
+    <section id="v-startup" class="view" hidden>
+      <form id="sform" class="form">
+        <div class="fs">
+          <h2>Nama server</h2>
+          <p class="hint">Tampil di judul halaman dan di bot kontrol Telegram.</p>
+          <input id="s-name" maxlength="40" aria-label="Nama server">
+        </div>
+        <div class="fs">
+          <h2>Perintah mulai</h2>
+          <p class="hint">Dijalankan dari folder di halaman File. Setelah ZIP diekstrak, perintah ini terisi otomatis jika terdeteksi.</p>
+          <input id="s-startup" class="mono" spellcheck="false" placeholder="node index.js" aria-label="Perintah mulai">
+          <div class="chips" aria-label="Contoh perintah">
+            <button type="button" class="chip" data-cmd="node index.js">node index.js</button>
+            <button type="button" class="chip" data-cmd="npm start">npm start</button>
+            <button type="button" class="chip" data-cmd="python3 main.py">python3 main.py</button>
+            <button type="button" class="chip" data-cmd="python3 bot.py">python3 bot.py</button>
+          </div>
+        </div>
+        <div class="fs">
+          <h2>Variabel lingkungan</h2>
+          <p class="hint">Satu baris satu variabel, format KEY=VALUE. Simpan token bot di sini, jangan di dalam script.</p>
+          <textarea id="s-env" class="mono" rows="5" spellcheck="false" placeholder="BOT_TOKEN=123456:ABC..." aria-label="Variabel lingkungan"></textarea>
+        </div>
+        <div class="fs">
+          <h2>Perilaku</h2>
+          <label class="check"><input type="checkbox" id="s-restart"> Mulai ulang otomatis jika server berhenti tak terduga</label>
+          <label class="check"><input type="checkbox" id="s-auto"> Jalankan server saat panel menyala</label>
+          <div class="inline">
+            <label for="s-mem">Batas RAM (MB)</label>
+            <input id="s-mem" type="number" min="0" max="65536" step="1" value="0">
+            <span class="hint">0 berarti tanpa batas. Server dihentikan paksa jika melewati batas.</span>
+          </div>
+        </div>
+        <div class="fs">
+          <h2>Dependensi</h2>
+          <p class="hint">Menjalankan <span class="mono">npm install</span> jika ada package.json, dan <span class="mono">pip install -r requirements.txt</span> jika ada requirements.txt. Hasilnya tampil di Konsol.</p>
+          <button type="button" class="key small" id="s-install">Pasang dependensi</button>
+        </div>
+        <div class="fs last"><button type="submit" class="key primary">Simpan pengaturan</button></div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <form id="dlg-form">
+    <h2 id="dlg-title"></h2>
+    <div id="dlg-body" class="dlg-body"></div>
+    <div class="dlg-foot">
+      <button type="button" class="key" id="dlg-cancel">Batal</button>
+      <button type="submit" class="key primary" id="dlg-ok">OK</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="editor" class="wide">
+  <div class="ed-head"><strong id="ed-path"></strong><span id="ed-dirty" class="dirty" hidden>Belum disimpan</span></div>
+  <textarea id="ed-text" spellcheck="false" aria-label="Isi file"></textarea>
+  <div class="dlg-foot">
+    <button type="button" class="key" id="ed-close">Tutup</button>
+    <button type="button" class="key primary" id="ed-save">Simpan</button>
+  </div>
+</dialog>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<script src="/assets/app.js"></script>
+</body>
+</html>

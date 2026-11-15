@@ -1,0 +1,11 @@
+services:
+  sora-panel:
+    build: .
+    restart: always            # hidup lagi otomatis jika crash atau server reboot
+    env_file: .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - sora-data:/app/data    # script bot, pengaturan, dan sesi login
+volumes:
+  sora-data:

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Masuk - Sora Panel</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sora.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%2315222C'/%3E%3Ctext x='32' y='47' font-size='40' text-anchor='middle' fill='white' font-family='sans-serif'%3E空%3C/text%3E%3C/svg%3E">
+</head>
+<body class="login-page">
+<main class="login">
+  <div class="login-col">
+    <div class="brand"><span class="stamp" aria-hidden="true">空</span><span class="word">SORA PANEL</span></div>
+    <h1>Masuk</h1>
+    <p class="sub">Jalankan dan pantau script bot Telegram dari satu tempat.</p>
+    <form id="f" class="login-form">
+      <label for="u">Username</label>
+      <input id="u" name="username" autocomplete="username" required autofocus>
+      <label for="p">Password</label>
+      <input id="p" name="password" type="password" autocomplete="current-password" required>
+      <p id="err" class="login-err" role="alert" hidden></p>
+      <button class="key primary block" id="go" type="submit">Masuk</button>
+    </form>
+  </div>
+  <div class="login-slab" aria-hidden="true">
+    <div class="slab-bar">Konsol</div>
+<pre><span class="y">[sora]</span> panel siap
+<span class="y">[sora]</span> menunggu login
+<span class="d">›</span> </pre>
+  </div>
+</main>
+<script src="/assets/login.js"></script>
+</body>
+</html>
